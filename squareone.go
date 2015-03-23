@@ -15,13 +15,13 @@ const (
 // A Piece is an edge or corner piece.
 type Piece struct {
 	Edge        bool
-	TopColor    int
-	SecondColor int
-	ThirdColor  int
+	TopColor    Color
+	SecondColor Color
+	ThirdColor  Color
 }
 
 // A Square1 represents the state of a square-1 puzzle. It does not allow for
-// situations where a 60 degree piece is halfway between the middle crack.
+// situations where a 60 degree piece is halfway between the front middle crack.
 type Square1 struct {
 	MiddleSquare bool
 	BottomCount  int
@@ -67,7 +67,7 @@ func (s Square1) TurnBottom() int {
 	angle := 0
 	for {
 		piece := s.Bottom[s.BottomCount-1]
-		copy(s.Bottom[1:], s.Bottom[0:])
+		copy(s.Bottom[1:], s.Bottom[:])
 		s.Bottom[0] = piece
 		if piece.Edge {
 			angle++
@@ -86,7 +86,7 @@ func (s Square1) TurnTop() int {
 	angle := 0
 	for {
 		piece := s.Top[s.TopCount-1]
-		copy(s.Top[1:], s.Top[0:])
+		copy(s.Top[1:], s.Top[:])
 		s.Top[0] = piece
 		if piece.Edge {
 			angle++
@@ -160,14 +160,14 @@ func (s Square1) TurnRight() {
 		}
 		if angle >= 6 {
 			s.TopCount = i + 1
+			break
 		}
 	}
 
 	// Copy second half of top to bottom.
 	s.BottomCount = 0
 	for i := s.TopCount; i < topCount; i++ {
-		piece := top[i]
-		s.Bottom[s.BottomCount] = piece
+		s.Bottom[s.BottomCount] = top[i]
 		s.BottomCount++
 	}
 
