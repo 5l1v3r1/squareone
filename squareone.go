@@ -1,13 +1,13 @@
 package squareone
 
-// A Color is a number in the range [0, 6).
+// A Color is a number in the range [1, 6].
 type Color int
 
 const (
-	Yellow = 0
-	White  = 1
-	Blue   = 2
-	Green  = 3
+	Yellow = 1
+	White  = 2
+	Blue   = 3
+	Green  = 4
 	Red    = 5
 	Orange = 6
 )
@@ -56,14 +56,14 @@ func NewSquare1() Square1 {
 	res.Bottom[4] = Piece{true, White, Green, 0}
 	res.Bottom[5] = Piece{false, White, Green, Orange}
 	res.Bottom[6] = Piece{true, White, Orange, 0}
-	res.Bottom[7] = Piece{true, White, Orange, Blue}
+	res.Bottom[7] = Piece{false, White, Orange, Blue}
 
 	return res
 }
 
 // TurnBottom turns the bottom the next reasonable amount.
 // This returns the number of 30 degree clockwise turns.
-func (s Square1) TurnBottom() int {
+func (s *Square1) TurnBottom() int {
 	angle := 0
 	for {
 		piece := s.Bottom[s.BottomCount-1]
@@ -82,7 +82,7 @@ func (s Square1) TurnBottom() int {
 
 // TurnTop turns the top the next reasonable amount.
 // This returns the number of 30 degree clockwise turns.
-func (s Square1) TurnTop() int {
+func (s *Square1) TurnTop() int {
 	angle := 0
 	for {
 		piece := s.Top[s.TopCount-1]
@@ -100,7 +100,7 @@ func (s Square1) TurnTop() int {
 }
 
 // ValidBottom returns true if the bottom can be moved.
-func (s Square1) ValidBottom() bool {
+func (s *Square1) ValidBottom() bool {
 	angle := 0
 	for i := 0; i < s.BottomCount; i++ {
 		x := s.Bottom[i]
@@ -119,7 +119,7 @@ func (s Square1) ValidBottom() bool {
 }
 
 // ValidTop returns true if the top can be moved.
-func (s Square1) ValidTop() bool {
+func (s *Square1) ValidTop() bool {
 	angle := 0
 	for i := 0; i < s.TopCount; i++ {
 		x := s.Top[i]
@@ -138,7 +138,7 @@ func (s Square1) ValidTop() bool {
 }
 
 // TurnRight turns the right part of the puzzle 180 degrees.
-func (s Square1) TurnRight() {
+func (s *Square1) TurnRight() {
 	s.MiddleSquare = !s.MiddleSquare
 
 	// Backup the old state.

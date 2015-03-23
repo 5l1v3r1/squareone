@@ -7,21 +7,28 @@ import (
 	"os"
 )
 
-func InputSquareOne() Square1 {
+func Input() Square1 {
 	res := NewSquare1()
 
 	fmt.Print("Is the middle square? [y/n]: ")
 	res.MiddleSquare = (inputLine() == "y")
 
+	/*
+	fmt.Println("")
 	fmt.Println("Hold orange left and blue front so the logo is on the left.")
+	fmt.Println("")
 	fmt.Println("Turn the top and bottom as needed so the front crack is not" +
 		" blocked by a corner piece.")
+	fmt.Println("")
 	fmt.Println("Enter the top face clockwise starting from the left of the" +
 		" crack. For every piece, type either two or three letters depending" +
 		" on the type of piece. Type an empty string to finish.")
+	fmt.Println("")
+	*/
+	fmt.Println("Enter front face. Enter blank piece when done.")
 	res.TopCount = 0
 	for i := 0; i < 10; i++ {
-		fmt.Println("Piece: ")
+		fmt.Print("Piece: ")
 		pieceInfo := inputLine()
 		if pieceInfo == "" {
 			break
@@ -35,11 +42,12 @@ func InputSquareOne() Square1 {
 		res.Top[res.TopCount] = *piece
 		res.TopCount++
 	}
-	fmt.Println("Enter the bottom layer the same way, starting from the right" +
-		" of the crack.")
+	fmt.Println("")
+	fmt.Println("Enter bottom face the same way.")
+	fmt.Println("")
 	res.BottomCount = 0
 	for i := 0; i < 10; i++ {
-		fmt.Println("Piece: ")
+		fmt.Print("Piece: ")
 		pieceInfo := inputLine()
 		if pieceInfo == "" {
 			break
@@ -84,7 +92,7 @@ func parseColor(name uint8) (Color, error) {
 
 func parsePiece(piece string) (*Piece, error) {
 	if len(piece) < 2 || len(piece) > 3 {
-		panic("invalid piece: " + piece)
+		return nil, errors.New("invalid piece: " + piece)
 	}
 	var res Piece
 	var err error
